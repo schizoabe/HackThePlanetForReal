@@ -48,9 +48,7 @@ private func SJKI_OpenBreachHUD(ps: ref<ScriptableDeviceComponentPS>) -> Void {
   bb.SetBool    (GetAllBlackboardDefs().NetworkBlackboard.RemoteBreach,  false);
   bb.SetInt     (GetAllBlackboardDefs().NetworkBlackboard.Attempt,       ps.m_minigameAttempt);
   bb.SetEntityID(GetAllBlackboardDefs().NetworkBlackboard.DeviceID,      ps.GetMyEntityID());
-  if TDBID.IsValid(minigameDef) {
-    bb.SetVariant(GetAllBlackboardDefs().NetworkBlackboard.MinigameDef,  ToVariant(minigameDef));
-  }
+  bb.SetVariant(GetAllBlackboardDefs().NetworkBlackboard.MinigameDef,  ToVariant(minigameDef));
   bb.SetString  (GetAllBlackboardDefs().NetworkBlackboard.NetworkName,   ps.GetDeviceName(), true);
 }
 

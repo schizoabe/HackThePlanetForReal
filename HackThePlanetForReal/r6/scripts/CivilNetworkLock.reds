@@ -41,16 +41,15 @@ protected func ToggleInteractionLayers() -> Void {
 
 @wrapMethod(ScriptedPuppet)
 public const func IsQuickHackAble() -> Bool {
-  if this.IsCrowd() { return true; };
-  if this.IsVendor() { return true; };
+  // Always show the quickhack wheel on any NPC — GetAllChoices gates individual actions
+  if ScriptedPuppet.IsAlive(this) { return true; };
   return wrappedMethod();
 }
 
 
 @wrapMethod(ScriptedPuppet)
 protected const func ShouldRegisterToHUD() -> Bool {
-  if this.IsCrowd() { return true; };
-  if this.IsVendor() { return true; };
+  if ScriptedPuppet.IsAlive(this) { return true; };
   return wrappedMethod();
 }
 
@@ -80,12 +79,14 @@ public final const func GetAllChoices(
 
   let npc: ref<ScriptedPuppet> = this.GetOwnerEntity() as ScriptedPuppet;
   if !IsDefined(npc) { return; }
-  if !npc.IsCrowd() && !npc.IsVendor() { return; }
 
-
+  // Gate applies to all NPCs — not just crowd/vendor
   CSNL_Log("GetAllChoices: checking ["
     + TDBID.ToStringDEBUG(npc.GetRecordID())
     + "] breached=" + ToString(this.m_sjkiNPCSubnetBreached));
+
+  // Pass through if subnet was breached (SJKI standalone path or BN AP path —
+  // both stamp m_sjkiNPCSubnetBreached via SJKIStampNPCBreachedEvent)
   if this.m_sjkiNPCSubnetBreached { return; }
 
   CSNL_Log("GetAllChoices: locking unbreached ["
